@@ -47,7 +47,7 @@ def file(filetype, f):
         f.save(filename)
         uploadFile(filename)
         os.remove(filename)
-        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
+        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/audio/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
         resp.mimetype = 'text/plain'
         return resp
 
@@ -90,7 +90,7 @@ def upload_fileto():
             f.save(f.filename)
             uploadFile(filename)
             os.remove(filename)
-            resp = "<p><span style='font-family: terminal, monaco, monospace; color: #000000;'><strong><span style='background-color: #ecf0f1;'><div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div></span></strong></span></p>"
+            resp = "https://backend.rishabh.ml/0:/" + filename
             resp.mimetype = 'text/plain'
             return resp
         # filename = str(uuid.uuid4()) + filetype
