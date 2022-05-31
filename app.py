@@ -28,15 +28,20 @@ def uploadFile(file_name, mime):
     print('File ID: ' + file.get('id'))
 
 image = {'.jpg', '.jpeg', '.png'}
-video = {'mp4', 'mkv'}
-audio = {'mp3', 'ogg'}
+video = {'.mp4', '.mkv'}
+audio = {'.mp3', '.ogg'}
 def file(filetype, f):
     filename = str(uuid.uuid4()) + filetype
     with open('logs.txt', 'a+') as fa:
-        fa.write(request.headers.get('X-Forwarded-For', request.remote_addr) + ' uploaded ' + filename)
-    if filetype in video:
+        fa.write(request.headers.get('X-Forwarded-For', request.remote_addr) + ' uploaded ' + filename + '\n')
+        fa.close()
+    if filetype == 'nigga':
+        print('nigga')
+    
+    elif filetype in video:
         f.save(filename)
         uploadFile(filename, 'video/mp4')
+        print('file Video')
         os.remove(filename)
         resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "&load=none' height='360' width=100% allowfullscreen=True></iframe></div>"
         return resp
@@ -68,6 +73,11 @@ def upload_file():
     
 @app.route('/loggs')
 def log():
+   return send_file('logs.txt', mimetype='text/plain')
+
+@app.route('/reload')
+def reload():
+   r = request.get()
    return send_file('logs.txt', mimetype='text/plain')
 
 @app.route('/uploader', methods = ['GET', 'POST'])
