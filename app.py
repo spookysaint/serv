@@ -16,12 +16,13 @@ if not creds or creds.invalid:
     creds = tools.run_flow(flow, store)
 drive_service = build('drive', 'v3', http=creds.authorize(Http()))
 
-def uploadFile(filename):
+def uploadFile(filename)
+        os.remove(filename):
     file_metadata = {
     'name': filename,
     'mimeType': '*/*',
     "parents": ['1wnUgeiT-_sd_3mXqA37g4hrWnTX5R7ny']}
-    media = MediaFileUpload("uploaded_files/" + filename,
+    media = MediaFileUpload(filename,
                             mimetype='*/*',
                             resumable=True)
     file = drive_service.files().create(body=file_metadata, media_body=media, fields='id', supportsAllDrives=True).execute()
@@ -31,7 +32,7 @@ app = Flask(__name__)
 
 # def filesend(filetype):
 #     filename = str(uuid.uuid4()) + filetype
-#     f.save(folder+ '/' + filename)
+#     f.save(filename)
 folder = 'uploaded_files'
 @app.route('/')
 def upload_file():
@@ -44,26 +45,30 @@ def upload_fileto():
       if '.png' in f.filename:
         filetype = '.png'
         filename = str(uuid.uuid4()) + filetype
-        f.save(folder+ '/' + filename)
+        f.save(filename)
         uploadFile(filename)
+        os.remove(filename)
         return "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
       if '.mp4' in f.filename:
         filetype = '.mp4'
         filename = str(uuid.uuid4()) + filetype
-        f.save(folder+ '/' + filename)
+        f.save(filename)
         uploadFile(filename)
+        os.remove(filename)
         return jsonify("<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>")
       if '.jpg' in f.filename:
         filetype = '.jpg'
         filename = str(uuid.uuid4()) + filetype
-        f.save(folder+ '/' + filename)
+        f.save(filename)
         uploadFile(filename)
+        os.remove(filename)
         return "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
       if '.mkv' in f.filename:
         filetype = '.mp4'
         filename = str(uuid.uuid4()) + filetype
-        f.save(folder+ '/' + filename)
+        f.save(filename)
         uploadFile(filename)
+        os.remove(filename)
         return "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
       else:
         return "Your Uploaded File Type is Not Avilable for Upload Ask @Rishabhmoodi For the same"
