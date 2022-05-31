@@ -16,12 +16,12 @@ if not creds or creds.invalid:
     creds = tools.run_flow(flow, store)
 drive_service = build('drive', 'v3', http=creds.authorize(Http()))
 
-def uploadFile(filename):
+def uploadFile(file_name):
     file_metadata = {
-    'name': filename,
+    'name': file_name,
     'mimeType': '*/*',
     "parents": ['1wnUgeiT-_sd_3mXqA37g4hrWnTX5R7ny']}
-    media = MediaFileUpload(filename,
+    media = MediaFileUpload(file_name,
                             mimetype='*/*',
                             resumable=True)
     file = drive_service.files().create(body=file_metadata, media_body=media, fields='id', supportsAllDrives=True).execute()
