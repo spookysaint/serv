@@ -32,7 +32,7 @@ def file(filetype, f):
         f.save(filename)
         uploadFile(filename)
         os.remove(filename)
-        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
+        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "&load=none' height='360' width=100% allowfullscreen=True></iframe></div>"
         return resp
 
     elif '.png' or '.jpg' or '.jpeg' in filetype:
@@ -48,7 +48,7 @@ def file(filetype, f):
         f.save(filename)
         uploadFile(filename)
         os.remove(filename)
-        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/audio/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
+        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/audio/?url=https://backend.rishabh.ml/0:/" + filename + "&load=none' height='360' width=100% allowfullscreen=True></iframe></div>"
         return resp
 
       #import werkzeug
