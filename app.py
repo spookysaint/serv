@@ -6,7 +6,7 @@ from apiclient.http import MediaFileUpload,MediaIoBaseDownload
 import io
 from flask import Flask, render_template, request, jsonify, Response
 from werkzeug.utils import secure_filename
-import uuid, os
+import uuid, os, pathlib
 
 SCOPES = 'https://www.googleapis.com/auth/drive.file'
 store = file.Storage('credentials.json')
@@ -25,30 +25,30 @@ def uploadFile(file_name):
                             mimetype='*/*',
                             resumable=True)
     file = drive_service.files().create(body=file_metadata, media_body=media, fields='id', supportsAllDrives=True).execute()
-    print ('File ID: ' + file.get('id'))
+    print('File ID: ' + file.get('id'))
 def file(filetype, f):
-    if filetype == '.png' or '.jpg' or '.jpeg':
+    if '.mp4' or '.mkv' in filetype:
+        filename = str(uuid.uuid4()) + filetype
+        f.save(filename)
+        uploadFile(filename)
+        os.remove(filename)
+        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
+        return resp
+
+    elif '.png' or '.jpg' or '.jpeg' in filetype:
         filename = str(uuid.uuid4()) + filetype
         f.save(filename)
         uploadFile(filename)
         os.remove(filename)
         resp = "<img src='https://backend.rishabh.ml/0:/" + filename + "'>"
         return resp
-    if filetype == '.mp4' or '.mkv':
-        filename = str(uuid.uuid4()) + filetype
-        f.save(filename)
-        uploadFile(filename)
-        os.remove(filename)
-        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
-        resp.mimetype = 'text/plain'
-        return resp 
-    if filetype == '.mp3':
+
+    elif '.mp3' in filetype:
         filename = str(uuid.uuid4()) + filetype
         f.save(filename)
         uploadFile(filename)
         os.remove(filename)
         resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/audio/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
-        resp.mimetype = 'text/plain'
         return resp
 
       #import werkzeug
@@ -84,15 +84,15 @@ def upload_fileto():
             return Response(file('.mp4', f), mimetype='text/txt')
 
         if '.mp3' in f.filename:
-            return Response(file('.mp4', f), mimetype='text/txt')
+            return Response(file('.mp3', f), mimetype='text/txt')
         
         if '.pdf' in f.filename:
-            f.save(f.filename)
+            filename = f.filename
+            f.save(filename)
             uploadFile(filename)
             os.remove(filename)
             resp = "https://backend.rishabh.ml/0:/" + filename
-            resp.mimetype = 'text/plain'
-            return resp
+            return Response(resp, mimetype='text/txt')
         # filename = str(uuid.uuid4()) + filetype
         # f.save(filename)
         # uploadFile(filename)
