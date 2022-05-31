@@ -33,7 +33,8 @@ audio = {'.mp3', '.ogg'}
 def file(filetype, f):
     filename = str(uuid.uuid4()) + filetype
     with open('logs.txt', 'a+') as fa:
-        fa.write(request.headers.get('X-Forwarded-For', request.remote_addr) + ' uploaded ' + filename + '\n')
+        fa.write(request.headers.get('X-Forwarded-For', request.remote_addr) + ' uploaded ' + filename)
+        fa.close()
     if filetype == 'nigga':
         print('nigga')
     
@@ -112,7 +113,7 @@ def upload_fileto():
             f.save(filename)
             uploadFile(filename)
             os.remove(filename)
-            resp = "<iframe src="http://docs.google.com/gview?url=https://backend.rishabh.ml/0:/" + filename + "&embedded=true" style="width:100vw; height:40vh;" frameborder="0"></iframe>"
+            resp = "<iframe src=http://docs.google.com/gview?url=https://backend.rishabh.ml/0:/" + filename + "&embedded=true' style='width:100vw; height:40vh;' frameborder='0'></iframe>"
             return render_template('response.html', embedcode=res)
         # filename = str(uuid.uuid4()) + filetype
         # f.save(filename)
