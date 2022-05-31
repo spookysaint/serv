@@ -69,22 +69,26 @@ def upload_fileto():
       if '.png' or '.jpg' or '.jpeg' or '.mp4' or '.mkv' or '.mp3' or '.pdf' in f.filename:
         
         if '.png' in f.filename:
-            #res = file('.png', f)
-            return Response(file('.png', f), mimetype='text/txt')
+            res = file('.png', f)
+            return render_template('response.html', embedcode=res)
         if '.jpg' in f.filename:
-            return Response(file('.jpg', f), mimetype='text/txt')
-        
+            res = file('.jpg', f)
+            return render_template('response.html', embedcode=res)        
         if '.jpeg' in f.filename:
-            return Response(file('.jpeg', f), mimetype='text/txt')
+            res = file('.jpeg', f)
+            return render_template('response.html', embedcode=res)
         
         if '.mkv' in f.filename:
-            return Response(file('.mkv', f), mimetype='text/txt')
+            res = file('.mkv', f)
+            return render_template('response.html', embedcode=res)
         
         if '.mp4' in f.filename:
-            return Response(file('.mp4', f), mimetype='text/txt')
+            res = file('.mp4', f)
+            return render_template('response.html', embedcode=res)
 
         if '.mp3' in f.filename:
-            return Response(file('.mp3', f), mimetype='text/txt')
+            res = file('.mp3', f)
+            return render_template('response.html', embedcode=res)
         
         if '.pdf' in f.filename:
             filename = f.filename
@@ -92,7 +96,7 @@ def upload_fileto():
             uploadFile(filename)
             os.remove(filename)
             resp = "https://backend.rishabh.ml/0:/" + filename
-            return Response(resp, mimetype='text/txt')
+            return render_template('response.html', embedcode=res)
         # filename = str(uuid.uuid4()) + filetype
         # f.save(filename)
         # uploadFile(filename)
