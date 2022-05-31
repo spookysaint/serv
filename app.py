@@ -16,8 +16,7 @@ if not creds or creds.invalid:
     creds = tools.run_flow(flow, store)
 drive_service = build('drive', 'v3', http=creds.authorize(Http()))
 
-def uploadFile(filename)
-        os.remove(filename):
+def uploadFile(filename):
     file_metadata = {
     'name': filename,
     'mimeType': '*/*',
