@@ -35,7 +35,7 @@ app = Flask(__name__)
 folder = 'uploaded_files'
 @app.route('/')
 def upload_file():
-   return render_template('index.html')
+   return render_template('index.html', port=os.getenv("PORT"))
     
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_fileto():
