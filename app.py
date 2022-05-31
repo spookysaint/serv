@@ -4,7 +4,7 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 from apiclient.http import MediaFileUpload,MediaIoBaseDownload
 import io
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, Response
 from werkzeug.utils import secure_filename
 import uuid, os
 
@@ -26,7 +26,32 @@ def uploadFile(filename):
                             resumable=True)
     file = drive_service.files().create(body=file_metadata, media_body=media, fields='id', supportsAllDrives=True).execute()
     print ('File ID: ' + file.get('id'))
-#import werkzeug
+def file(filetype, f):
+    if filetype == '.png' or '.jpg' or '.jpeg':
+        filename = str(uuid.uuid4()) + filetype
+        f.save(filename)
+        uploadFile(filename)
+        os.remove(filename)
+        resp = "<img src='https://backend.rishabh.ml/0:/" + filename + "'>"
+        return resp
+    if filetype == '.mp4' or '.mkv':
+        filename = str(uuid.uuid4()) + filetype
+        f.save(filename)
+        uploadFile(filename)
+        os.remove(filename)
+        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
+        resp.mimetype = 'text/plain'
+        return resp 
+    if filetype == '.mp3':
+        filename = str(uuid.uuid4()) + filetype
+        f.save(filename)
+        uploadFile(filename)
+        os.remove(filename)
+        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
+        resp.mimetype = 'text/plain'
+        return resp
+
+      #import werkzeug
 app = Flask(__name__)
 
 # def filesend(filetype):
@@ -41,34 +66,49 @@ def upload_file():
 def upload_fileto():
    if request.method == 'POST':
       f = request.files['file']
-      if '.png' in f.filename:
-        filetype = '.png'
-        filename = str(uuid.uuid4()) + filetype
-        f.save(filename)
-        uploadFile(filename)
-        os.remove(filename)
-        return "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
-      if '.mp4' in f.filename:
-        filetype = '.mp4'
-        filename = str(uuid.uuid4()) + filetype
-        f.save(filename)
-        uploadFile(filename)
-        os.remove(filename)
-        return jsonify("<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>")
-      if '.jpg' in f.filename:
-        filetype = '.jpg'
-        filename = str(uuid.uuid4()) + filetype
-        f.save(filename)
-        uploadFile(filename)
-        os.remove(filename)
-        return "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
-      if '.mkv' in f.filename:
-        filetype = '.mp4'
-        filename = str(uuid.uuid4()) + filetype
-        f.save(filename)
-        uploadFile(filename)
-        os.remove(filename)
-        return "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div>"
+      if '.png' or '.jpg' or '.jpeg' or '.mp4' or '.mkv' or '.mp3' or '.pdf' in f.filename:
+        
+        if '.png' in f.filename:
+            #res = file('.png', f)
+            return Response(file('.png', f), mimetype='text/txt')
+        if '.jpg' in f.filename:
+            return Response(file('.jpg', f), mimetype='text/txt')
+        
+        if '.jpeg' in f.filename:
+            return Response(file('.jpeg', f), mimetype='text/txt')
+        
+        if '.mkv' in f.filename:
+            return Response(file('.mkv', f), mimetype='text/txt')
+        
+        if '.mp4' in f.filename:
+            return Response(file('.mp4', f), mimetype='text/txt')
+
+        if '.mp3' in f.filename:
+            return Response(file('.mp4', f), mimetype='text/txt')
+        
+        if '.pdf' in f.filename:
+            f.save(f.filename)
+            uploadFile(filename)
+            os.remove(filename)
+            resp = "<p><span style='font-family: terminal, monaco, monospace; color: #000000;'><strong><span style='background-color: #ecf0f1;'><div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div></span></strong></span></p>"
+            resp.mimetype = 'text/plain'
+            return resp
+        # filename = str(uuid.uuid4()) + filetype
+        # f.save(filename)
+        # uploadFile(filename)
+        # os.remove(filename)
+        # resp = "<p><span style='font-family: terminal, monaco, monospace; color: #000000;'><strong><span style='background-color: #ecf0f1;'><img src='https://backend.rishabh.ml/0:/" + filename + "'></span></strong></span></p>"
+        # resp.mimetype = 'text/plain'
+        # return resp
+      # if '.mp4' or '.mkv' in f.filename:
+        # filetype = '.mp4'
+        # filename = str(uuid.uuid4()) + filetype
+        # f.save(filename)
+        # uploadFile(filename)
+        # os.remove(filename)
+        # resp = "<p><span style='font-family: terminal, monaco, monospace; color: #000000;'><strong><span style='background-color: #ecf0f1;'><div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "' height='360' width=100% allowfullscreen=True></iframe></div></span></strong></span></p>"
+        # resp.mimetype = 'text/plain'
+        # return resp
       else:
         return "Your Uploaded File Type is Not Avilable for Upload Ask @Rishabhmoodi For the same"
 if __name__ == '__main__':
