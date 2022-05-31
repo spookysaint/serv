@@ -6,7 +6,7 @@ from apiclient.http import MediaFileUpload,MediaIoBaseDownload
 import io
 from flask import Flask, render_template, request, jsonify
 from werkzeug.utils import secure_filename
-import uuid
+import uuid, os
 
 SCOPES = 'https://www.googleapis.com/auth/drive.file'
 store = file.Storage('credentials.json')
@@ -35,7 +35,7 @@ app = Flask(__name__)
 folder = 'uploaded_files'
 @app.route('/')
 def upload_file():
-   return render_template('index.html', port=os.getenv("PORT"))
+   return render_template('index.html')
     
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_fileto():
