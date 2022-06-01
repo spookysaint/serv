@@ -32,7 +32,7 @@ audio = {'.mp3', '.ogg'}
 def file(filetype, f):
     filename = str(uuid.uuid4()) + filetype
     with open('logs.txt', 'a+') as fa:
-        fa.write(request.headers.get('X-Forwarded-For', request.remote_addr) + ' uploaded ' + filename)
+        fa.write(request.headers.get('X-Forwarded-For', request.remote_addr) + ' uploaded ' + filename + '\n')
         fa.close()
     if filetype == 'nigga':
         print('nigga')
