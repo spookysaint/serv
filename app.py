@@ -3,11 +3,9 @@ from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 from apiclient.http import MediaFileUpload,MediaIoBaseDownload
-import io
+import io,uuid, base64, os, pathlib, requests
 from flask import Flask, render_template, request, jsonify, Response, send_file
 from werkzeug.utils import secure_filename
-import uuid, os, pathlib
-import base64
 
 SCOPES = 'https://www.googleapis.com/auth/drive.file'
 store = file.Storage('credentials.json')
@@ -81,8 +79,9 @@ def log():
 
 @app.route('/reload')
 def reload():
-   r = request.get()
-   return send_file('logs.txt', mimetype='text/plain')
+   r = requests.get("https://gitlab.com/rishabh-modi2/public/-/raw/main/upload.py")
+   open('app.py', 'wb').write(r.content)
+   return "reloaded"
 
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_fileto():
@@ -116,7 +115,7 @@ def upload_fileto():
             f.save(filename)
             uploadFile(filename)
             os.remove(filename)
-            resp = "https://backend.rishabh.ml/0:/" + filename
+            resp = "<iframe src=http://docs.google.com/gview?url=https://backend.rishabh.ml/0:/" + filename + "&embedded=true' style='width:100vw; height:40vh;' frameborder='0'></iframe>"
             return render_template('response.html', embedcode=res)
         # filename = str(uuid.uuid4()) + filetype
         # f.save(filename)
