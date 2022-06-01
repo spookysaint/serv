@@ -3,10 +3,9 @@ from apiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 from apiclient.http import MediaFileUpload,MediaIoBaseDownload
-import io,uuid, os, pathlib, requests
+import io,uuid, base64, os, pathlib, requests
 from flask import Flask, render_template, request, jsonify, Response, send_file
 from werkzeug.utils import secure_filename
-
 
 SCOPES = 'https://www.googleapis.com/auth/drive.file'
 store = file.Storage('credentials.json')
@@ -25,7 +24,7 @@ def uploadFile(file_name, mime):
                             mimetype=mime,
                             resumable=True)
     file = drive_service.files().create(body=file_metadata, media_body=media, fields='id', supportsAllDrives=True).execute()
-    print('File ID: ' + file.get('id'))
+    return file.get('id')
 
 image = {'.jpg', '.jpeg', '.png'}
 video = {'.mp4', '.mkv'}
@@ -40,10 +39,13 @@ def file(filetype, f):
     
     elif filetype in video:
         f.save(filename)
-        uploadFile(filename, 'video/mp4')
+        sample_string = uploadFile(filename, 'video/mp4')
+        sample_string_bytes = sample_string.encode("ascii")
+        base64_bytes = base64.b64encode(sample_string_bytes)
+        base64_string = base64_bytes.decode("ascii")
         print('file Video')
         os.remove(filename)
-        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer.rishabh.ml/v/?url=https://backend.rishabh.ml/0:/" + filename + "&load=none' height='360' width=100% allowfullscreen=True></iframe></div>"
+        resp = "<div class='embed-responsive embed-responsive-16by9'><iframe src='https://videoplayer2.rishabh.ml/video-ui/?url=" + f"{base64_string}" + "&loading=none' height='360' width=100% allowfullscreen=True></iframe></div>"
         return resp
 
     elif filetype in image:
