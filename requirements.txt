@@ -7,3 +7,4 @@ werkzeug
 uuid
 oauth2client
 apiclient
+praw
