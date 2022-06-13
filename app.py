@@ -1,6 +1,7 @@
 import io,uuid, base64, os, pathlib, requests
 from flask import Flask, render_template, request, jsonify, Response, send_file
 
+app = Flask(__name__)
 @app.route('/')
 def upload_file():
    return render_template('index.html')
