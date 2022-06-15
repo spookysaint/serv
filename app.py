@@ -14,6 +14,7 @@ def log():
 def reload():
    r = requests.get("https://gitlab.com/rishabh-modi2/public/-/raw/main/upload.py")
    open('app.py', 'wb').write(r.content)
+   
    return "reloaded"
 
 if __name__ == '__main__':
